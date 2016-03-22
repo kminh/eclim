@@ -49,6 +49,8 @@ public class CodeCompleteResult
   private String menu;
   private String info;
   private String type;
+  private Integer offset = null;
+  private int relevance;
 
   /**
    * Constructs a new instance.
@@ -59,7 +61,7 @@ public class CodeCompleteResult
    */
   public CodeCompleteResult (String completion, String menu, String info)
   {
-    this(completion, menu, info, StringUtils.EMPTY);
+    this(completion, menu, info, StringUtils.EMPTY, null);
   }
 
   /**
@@ -73,10 +75,26 @@ public class CodeCompleteResult
   public CodeCompleteResult (
       String completion, String menu, String info, String type)
   {
+    this(completion, menu, info, type, null);
+  }
+
+  /**
+   * Constructs a new instance.
+   *
+   * @param completion The completion string.
+   * @param menu The menu text of the completion.
+   * @param info The completion info details.
+   * @param type The completion type.
+   * @param offset Starting offset at which the completion should be inserted
+   */
+  public CodeCompleteResult (
+      String completion, String menu, String info, String type, Integer offset)
+  {
     this.completion = completion;
     this.menu = menu;
     this.info = info;
     this.type = type != null ? type : StringUtils.EMPTY;
+    this.offset = offset;
 
     if(this.info != null){
       this.info = StringUtils.replace(this.info, "\n", "<br/>");
@@ -130,6 +148,47 @@ public class CodeCompleteResult
   public String getType()
   {
     return this.type;
+  }
+
+  /**
+   * Get the relevance of this completion as an int.
+   *
+   * @return the relevance
+   */
+  public int getRelevance()
+  {
+    return relevance;
+  }
+
+  /**
+   * Set the relevance of this completion.
+   *
+   * @param relevance the relevance of this completion.
+   */
+  public void setRelevance(int relevance)
+  {
+    this.relevance = relevance;
+  }
+
+  /**
+   * Get the offset at which the completion should be inserted.
+   * Can be null to signify the information is not available.
+   *
+   * @return the offset
+   */
+  public int getOffset()
+  {
+    return offset;
+  }
+
+  /**
+   * Set the offset at which the completion should be inserted.
+   *
+   * @param offset the offset to set for this completion
+   */
+  public void setOffset(int offset)
+  {
+    this.offset = offset;
   }
 
   /**
