@@ -5,7 +5,7 @@
 "
 " License:
 "
-" Copyright (C) 2005 - 2013  Eric Van Dewoestine
+" Copyright (C) 2005 - 2016  Eric Van Dewoestine
 "
 " This program is free software: you can redistribute it and/or modify
 " it under the terms of the GNU General Public License as published by
@@ -30,7 +30,19 @@ function! TestCompletePhp() " {{{
   edit! php/complete/test.php
   call vunit#PeekRedir()
 
-  call cursor(17, 13)
+  call cursor(11, 15)
+  let start = eclim#php#complete#CodeComplete(1, '')
+  call vunit#AssertEquals(14, start, 'Wrong starting column.')
+
+  let results = eclim#php#complete#CodeComplete(0, '')
+  call vunit#PeekRedir()
+  echo 'results = ' . string(results)
+  call vunit#AssertEquals(len(results), 3, 'Wrong number of results.')
+  call vunit#AssertEquals('Common', results[0].word, 'Wrong result.')
+  call vunit#AssertEquals('Test\', results[1].word, 'Wrong result.')
+  call vunit#AssertEquals('Test\Nested\', results[2].word, 'Wrong result.')
+
+  call cursor(18, 13)
   let start = eclim#php#complete#CodeComplete(1, '')
   call vunit#AssertEquals(12, start, 'Wrong starting column.')
 
